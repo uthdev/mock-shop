@@ -2,4 +2,8 @@ import chai from 'chai';
 
 const { expect } = chai;
 
-expect(true).to.equal(true);
+describe('Dummy Test', () => {
+  it('should pass true equals true', () => {
+    expect(true).to.equal(true);
+  });
+});
