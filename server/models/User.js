@@ -25,7 +25,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   User.associate = function (models) {
     // associations can be defined here
-    User.hasOne(models.Cart, { as: 'userCart', foreignKey: 'userId' });
+    User.hasOne(models.Carts, { as: 'userCart', foreignKey: 'userId' });
   };
   return User;
 };

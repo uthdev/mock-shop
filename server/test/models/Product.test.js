@@ -20,14 +20,14 @@ describe('Test for Product Model', () => {
     ['name', 'description', 'category', 'price', 'imageUrl', 'inStock'].forEach(checkPropertyExists(products));
   });
   context('associations', () => {
-    const Cart = 'the carts the product belongs to';
+    const Carts = 'the carts the product belongs to';
 
     before(() => {
-      Product.associate({ Cart });
+      Product.associate({ Carts });
     });
 
     it('defined a belongsToMany association with Cart', () => {
-      expect(Product.belongsToMany).to.have.been.calledWith(Cart, { as: 'cart', through: 'cartProduct', foreignKey: 'productId' });
+      expect(Product.belongsToMany).to.have.been.calledWith(Carts, { as: 'cart', through: 'cartProduct', foreignKey: 'productId' });
     });
   });
 });

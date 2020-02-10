@@ -20,14 +20,14 @@ describe('Test for Cart Model', () => {
     ['userId', 'productId'].forEach(checkPropertyExists(carts));
   });
   context('associations', () => {
-    const User = 'the owner of the cart';
+    const Users = 'the owner of the cart';
 
     before(() => {
-      Cart.associate({ User });
+      Cart.associate({ Users });
     });
 
     it('defines a belongsTo association with User', () => {
-      expect(Cart.belongsTo).to.have.been.calledWith(User, { as: 'theUser', foreignKey: 'userId' });
+      expect(Cart.belongsTo).to.have.been.calledWith(Users, { as: 'theUser', foreignKey: 'userId' });
     });
   });
 });

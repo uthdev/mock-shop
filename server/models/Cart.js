@@ -24,7 +24,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   Cart.associate = function (models) {
     // associations can be defined here
-    Cart.belongsTo(models.User, { as: 'theUser', foreignKey: 'userId' });
+    Cart.belongsTo(models.Users, { as: 'theUser', foreignKey: 'userId' });
   };
   return Cart;
 };
