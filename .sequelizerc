@@ -2,8 +2,8 @@ require("@babel/register");
 const path = require('path')
 
 module.exports = {
-  config: path.resolve('./server/database/config', 'config.js'),
-  'models-path': path.resolve('./server/models'),
-  'seeders-path': path.resolve('./server/database/seeders'),
-  'migrations-path': path.resolve('./server/database/migrations'),
+  config: path.resolve('./src/database/config', 'config.js'),
+  'models-path': path.resolve('./src/models'),
+  'seeders-path': path.resolve('./src/database/seeders'),
+  'migrations-path': path.resolve('./src/database/migrations'),
 }
