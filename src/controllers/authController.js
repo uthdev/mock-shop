@@ -2,7 +2,7 @@ import models from '../models';
 import {
   hashPassword, generateToken, comparePassword,
   successResponse, errorResponse,
-} from '../utils/index';
+} from '../utils';
 
 /**
  * @class AuthController
