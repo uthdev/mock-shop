@@ -17,7 +17,7 @@ export default class ProductValidator {
   static async addProductValidator(req, res, next) {
     const booking = req.body;
 
-    const productProperties = {
+    const productSchema = {
       name: 'required|string|min:2|max:50',
       description: 'required|string|min:2',
       category: 'required|string|min:2|max:50',
@@ -25,6 +25,23 @@ export default class ProductValidator {
       imageUrl: 'required|string',
       inStock: 'required|boolean'
     };
-    await validate(res, next, booking, productProperties);
+    await validate(res, next, booking, productSchema);
+  }
+
+  /**
+   * @method productIdValidator
+   * @description Method to validates product Id request params
+   * @param  {object} req - The request object
+   * @param  {object} res - The res response object
+   * @param  {function} next - The next() Function
+   * @returns {object} response object if validation fails or next() function when it passes
+   */
+  static async productIdValidator(req, res, next) {
+    const productId = req.params;
+
+    const productIdSchema = {
+      productId: 'required|integer|min:1|max:10000'
+    };
+    await validate(res, next, productId, productIdSchema);
   }
 }

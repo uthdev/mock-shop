@@ -17,13 +17,13 @@ export default class AccountValidator {
   static async registerValidator(req, res, next) {
     const user = req.body;
 
-    const userProperties = {
+    const userSchema = {
       email: 'required|email|max:50',
       password: 'required|string|min:6|max:20',
       firstName: 'required|alpha|min:2|max:50',
       lastName: 'required|alpha|min:2|max:50'
     };
-    await validate(res, next, user, userProperties);
+    await validate(res, next, user, userSchema);
   }
 
   /**
@@ -37,10 +37,10 @@ export default class AccountValidator {
   static async loginValidator(req, res, next) {
     const user = req.body;
 
-    const userProperties = {
+    const userSchema = {
       email: 'required|email|max:50',
       password: 'required|string|min:6|max:20'
     };
-    await validate(res, next, user, userProperties);
+    await validate(res, next, user, userSchema);
   }
 }
