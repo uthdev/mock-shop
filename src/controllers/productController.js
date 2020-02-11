@@ -25,6 +25,27 @@ export default class ProductController {
     }
   }
 
+  /**
+    * @method updateProduct
+    * @description Method to update product
+    * @param {object} req - The Request Object
+    * @param {object} res - The Response Object
+    * @returns {objectt} response object
+    */
+  static async updateProduct(req, res) {
+    const { productId } = req.params;
+    try {
+      const productExists = await Products.findByPk(productId);
+      if (!productExists) {
+        return errorResponse(res, 404, 'Product not found');
+      }
+      await Products.update(req.body,
+        { where: { id: productId } });
+      return successResponse(res, 200, { message: 'Product updated', ...req.body });
+    } catch (error) {
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
   
   /**
     * @method deleteProduct
