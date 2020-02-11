@@ -117,6 +117,54 @@ describe('PRODUCT CONTROLLERS', () => {
     });
   });
 
+  context('Update Product', () => {
+    const req = {
+      body: {},
+      params: {
+        productId: 1
+      }
+    };
+
+    const res = {
+      status: () => {},
+      json: () => {}
+    };
+    it('should respond with a status 200 and update the product', async () => {
+      const admin = await request
+        .post('/api/v1/auth/signin')
+        .send(adminUser);
+      const adminToken = admin.body.data.token;
+      const newProduct = await request
+        .post('/api/v1/products')
+        .set({ Authorization: `Bearer ${adminToken}` })
+        .send(product);
+      const productId = newProduct.body.data.id;
+      const res = await request
+        .put(`/api/v1/products/${productId}`)
+        .set({ Authorization: `Bearer ${adminToken}` })
+        .send(product);
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body.status).to.equal('success');
+      expect(res.body).to.have.property('data');
+    });
+    it('fakes a 404 Not found error when updating a product', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Products, 'findByPk').returns(null);
+
+      await ProductController.updateProduct(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+    });
+    it('fakes server error when updating a product', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Products, 'findByPk').returns(product);
+      sinon.stub(models.Products, 'update').throws();
+
+      await ProductController.updateProduct(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
+  });
+
   context('Delete Product', () => {
     const req = {
       params: {
@@ -133,8 +181,13 @@ describe('PRODUCT CONTROLLERS', () => {
         .post('/api/v1/auth/signin')
         .send(adminUser);
       const adminToken = admin.body.data.token;
+      const newProduct = await request
+        .post('/api/v1/products')
+        .set({ Authorization: `Bearer ${adminToken}` })
+        .send(product);
+      const productId = newProduct.body.data.id;
       const res = await request
-        .delete('/api/v1/products/1')
+        .delete(`/api/v1/products/${productId}`)
         .set({ Authorization: `Bearer ${adminToken}` });
       expect(res).to.have.status(200);
       expect(res.body).to.have.property('status');
