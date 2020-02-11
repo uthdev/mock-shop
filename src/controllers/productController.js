@@ -24,4 +24,30 @@ export default class ProductController {
       return errorResponse(res, 500, 'Internal Server Error');
     }
   }
+
+  
+  /**
+    * @method deleteProduct
+    * @description Method to delete product
+    * @param {object} req - The Request Object
+    * @param {object} res - The Response Object
+    * @returns {objectt} response object
+    */
+  static async deleteProduct(req, res) {
+    const { productId } = req.params;
+    try {
+      const productExist = await Products.findOne({
+        where: { id: productId }
+      });
+      if (!productExist) {
+        return errorResponse(res, 404, 'Product not found');
+      }
+      await Products.destroy({ where: { id: productId } });
+      const product = productExist.toJSON();
+      const response = { message: 'Product deleted', ...product };
+      return successResponse(res, 200, response);
+    } catch (error) {
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
 }

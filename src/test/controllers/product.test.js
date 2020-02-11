@@ -24,7 +24,7 @@ const nonAdmin = {
 
 const product = {
   name: faker.commerce.productName(),
-  description: faker.lorem.paragraph(),
+  description: faker.lorem.sentence(),
   category: faker.commerce.productMaterial(),
   price: faker.commerce.price(),
   imageUrl: faker.image.imageUrl(),
@@ -113,6 +113,47 @@ describe('PRODUCT CONTROLLERS', () => {
       sinon.stub(models.Products, 'create').throws();
 
       await ProductController.createProduct(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
+  });
+
+  context('Delete Product', () => {
+    const req = {
+      params: {
+        productId: 1,
+      }
+    };
+  
+    const res = {
+      status: () => {},
+      json: () => {},
+    };
+    it('should respond with a status 200 and delete the product', async () => {
+      const admin = await request
+        .post('/api/v1/auth/signin')
+        .send(adminUser);
+      const adminToken = admin.body.data.token;
+      const res = await request
+        .delete('/api/v1/products/1')
+        .set({ Authorization: `Bearer ${adminToken}` });
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body.status).to.equal('success');
+      expect(res.body).to.have.property('data');
+    });
+    it('fakes a 404 Not found error when deleting a product', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Products, 'findOne').returns(null);
+
+      await ProductController.deleteProduct(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+    });
+    it('fakes server error when deleting a product', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Products, 'findOne').returns(product);
+      sinon.stub(models.Products, 'destroy').throws();
+
+      await ProductController.deleteProduct(req, res);
       expect(res.status).to.have.been.calledWith(500);
     });
   });

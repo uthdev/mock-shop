@@ -1,8 +1,8 @@
 import Validator from 'validatorjs';
 import { errorResponse } from './responses';
 
-const validate = async (res, next, data, properties) => {
-  const validator = await new Validator(data, properties);
+const validate = async (res, next, data, schema) => {
+  const validator = await new Validator(data, schema);
   validator.passes(() => next());
   validator.fails(() => {
     const errors = validator.errors.all();
