@@ -1,6 +1,6 @@
 import models from '../models';
 import {
-  hashPassword, generateToken,
+  hashPassword, generateToken, comparePassword,
   successResponse, errorResponse,
 } from '../utils/index';
 
@@ -33,7 +33,35 @@ export default class AuthController {
       response.token = token;
       return successResponse(res, 201, response);
     } catch (error) {
-      console.log(error);
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
+
+  /**
+   * @method login
+   * @description Method for user sign in
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} response body object
+   */
+  static async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const user = await models.Users.findOne({ where: { email } });
+      if (!user) {
+        return errorResponse(res, 401, 'Invalid email or password');
+      }
+      const { id: userId, isAdmin } = user;
+      const isPasswordValid = await comparePassword(user.password, password);
+      if (!isPasswordValid) {
+        return errorResponse(res, 401, 'Invalid email or password');
+      }
+      const response = user.toJSON();
+      response.password = undefined;
+      const token = await generateToken({ userId, email, isAdmin });
+      response.token = token;
+      return successResponse(res, 200, response);
+    } catch (error) {
       return errorResponse(res, 500, 'Internal Server Error');
     }
   }
