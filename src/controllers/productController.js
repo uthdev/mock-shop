@@ -26,6 +26,42 @@ export default class ProductController {
   }
 
   /**
+    * @method getProducts
+    * @description Method to get all product
+    * @param {object} req - The Request Object
+    * @param {object} res - The Response Object
+    * @returns {objectt} response object
+    */
+  static async getProducts(req, res) {
+    try {
+      const products = await Products.findAll();
+      return successResponse(res, 200, products);
+    } catch (error) {
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
+
+  /**
+    * @method getSingleProduct
+    * @description Method to get a single product
+    * @param {object} req - The Request Object
+    * @param {object} res - The Response Object
+    * @returns {objectt} response object
+    */
+  static async getSingleProduct(req, res) {
+    const { productId } = req.params;
+    try {
+      const product = await Products.findByPk(productId);
+      if (!product) {
+        return errorResponse(res, 404, 'Product not found');
+      }
+      return successResponse(res, 200, product);
+    } catch (error) {
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
+
+  /**
     * @method updateProduct
     * @description Method to update product
     * @param {object} req - The Request Object
@@ -57,14 +93,14 @@ export default class ProductController {
   static async deleteProduct(req, res) {
     const { productId } = req.params;
     try {
-      const productExist = await Products.findOne({
+      const productExists = await Products.findOne({
         where: { id: productId }
       });
-      if (!productExist) {
+      if (!productExists) {
         return errorResponse(res, 404, 'Product not found');
       }
       await Products.destroy({ where: { id: productId } });
-      const product = productExist.toJSON();
+      const product = productExists.toJSON();
       const response = { message: 'Product deleted', ...product };
       return successResponse(res, 200, response);
     } catch (error) {
