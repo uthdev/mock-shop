@@ -15,7 +15,7 @@ export default class ProductValidator {
    * @returns {object} response object if validation fails or next() function when it passes
    */
   static async addProductValidator(req, res, next) {
-    const booking = req.body;
+    const product = req.body;
 
     const productSchema = {
       name: 'required|string|min:2|max:50',
@@ -25,7 +25,7 @@ export default class ProductValidator {
       imageUrl: 'required|string',
       inStock: 'required|boolean'
     };
-    await validate(res, next, booking, productSchema);
+    await validate(res, next, product, productSchema);
   }
 
   /**
@@ -37,7 +37,9 @@ export default class ProductValidator {
    * @returns {object} response object if validation fails or next() function when it passes
    */
   static async productIdValidator(req, res, next) {
-    const productId = req.params;
+    const { params: { productId: paramsId } } = req;
+    
+    const productId = paramsId ? req.params : req.body;
 
     const productIdSchema = {
       productId: 'required|integer|min:1|max:10000'

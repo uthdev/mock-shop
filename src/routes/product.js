@@ -15,6 +15,6 @@ productRoute.post('/', verifyToken, verifyAdmin, addProductValidator, createProd
 productRoute.get('/', verifyToken, getProducts);
 productRoute.get('/:productId', verifyToken, productIdValidator, getSingleProduct);
 productRoute.delete('/:productId', verifyToken, verifyAdmin, productIdValidator, deleteProduct);
-productRoute.put('/:productId', verifyToken, verifyAdmin, productIdValidator, updateProduct);
+productRoute.put('/:productId', verifyToken, verifyAdmin, productIdValidator, addProductValidator, updateProduct);
 
 export default productRoute;
