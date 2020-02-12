@@ -3,6 +3,15 @@ import { successResponse, errorResponse } from '../utils';
 
 const { Carts, Products } = models;
 
+const association = [
+  {
+    model: Products,
+    through: 'CartProducts',
+    attributes: ['name', 'description', 'category', 'price', 'imageUrl', 'inStock']
+  }
+];
+
+
 /**
  * @class CartController
  * @description Controllers for handling cart operations
@@ -30,6 +39,26 @@ export default class CartController {
       return successResponse(res, 201, cart);
       // const response = product.toJSON();
       // return successResponse(res, 201, { message: 'Product added to Cart', ...response });
+    } catch (error) {
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
+
+  /**
+   * @method getCart
+   * @description Method to get Cart
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object}  response object
+   */
+  static async getCart(req, res) {
+    const { userId } = req.user;
+    try {
+      const cart = await Carts.findAll({
+        where: { userId },
+        include: association
+      });
+      return successResponse(res, 200, cart);
     } catch (error) {
       return errorResponse(res, 500, 'Internal Server Error');
     }

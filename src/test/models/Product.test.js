@@ -27,7 +27,7 @@ describe('Test for Product Model', () => {
     });
 
     it('defined a belongsToMany association with Cart', () => {
-      expect(Product.belongsToMany).to.have.been.calledWith(Carts, { as: 'cart', through: 'cartProduct', foreignKey: 'productId' });
+      expect(Product.belongsToMany).to.have.been.calledWith(Carts, { through: 'CartProducts', foreignKey: 'productId' });
     });
   });
 });
