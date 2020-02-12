@@ -9,9 +9,9 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/', router);
+app.use('/api/v1', router);
 
-router.use('/*', (req, res) => {
+app.use('/*', (req, res) => {
   res.status(404).json({
     status: 'error',
     error: 'Endpoint not found! Go to the homepage using: /api/v1',
