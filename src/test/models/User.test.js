@@ -19,14 +19,15 @@ describe('Test for User Model', () => {
   context('properties', () => {
     ['firstName', 'lastName', 'email', 'password', 'isAdmin'].forEach(checkPropertyExists(users));
   });
+
   context('associations', () => {
-    const Carts = 'the user that owns a cart';
+    const Carts = 'the cart of the user';
 
     before(() => {
       User.associate({ Carts });
     });
 
-    it('defined a hasOne association with Cart', () => {
+    it('defines a hasOne association with Cart', () => {
       expect(User.hasOne).to.have.been.calledWith(Carts, { as: 'userCart', foreignKey: 'userId' });
     });
   });

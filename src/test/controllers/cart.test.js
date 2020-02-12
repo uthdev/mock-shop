@@ -104,4 +104,46 @@ describe('PRODUCT CONTROLLERS', () => {
       expect(res.status).to.have.been.calledWith(500);
     });
   });
+  context('Get Cart', () => {
+    const req = {
+      user: { userId: 1 }
+    };
+    const res = {
+      status: () => {},
+      json: () => {}
+    };
+    it('should return a status 200 and add get cart products', async () => {
+      const admin = await request
+        .post('/api/v1/auth/signin')
+        .send(adminUser);
+      const adminToken = admin.body.data.token;
+      const newProduct = await request
+        .post('/api/v1/products')
+        .set({ Authorization: `Bearer ${adminToken}` })
+        .send(product);
+      const productId = newProduct.body.data.id;
+      const user = await request
+        .post('/api/v1/auth/signin')
+        .send(nonAdmin);
+      const userToken = user.body.data.token;
+      await request
+        .post('/api/v1/carts')
+        .set({ Authorization: `Bearer ${userToken}` })
+        .send({ productId });
+      const res = await request
+        .get('/api/v1/carts')
+        .set({ Authorization: `Bearer ${userToken}` });
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body.status).to.equal('success');
+      expect(res.body).to.have.property('data');
+    });
+    it('fakes server error when getting cart product', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Carts, 'findAll').throws();
+
+      await CartController.getCart(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
+  });
 });

@@ -21,13 +21,16 @@ describe('Test for Cart Model', () => {
   });
   context('associations', () => {
     const Users = 'the owner of the cart';
+    const Products = 'the products in the cart';
 
     before(() => {
       Cart.associate({ Users });
+      Cart.associate({ Products });
     });
 
     it('defines a belongsTo association with User', () => {
       expect(Cart.belongsTo).to.have.been.calledWith(Users, { as: 'theUser', foreignKey: 'userId' });
+      expect(Cart.belongsToMany).to.have.been.calledWith(Products, { through: 'CartProducts', foreignKey: 'cartId' });
     });
   });
 });
