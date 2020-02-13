@@ -63,4 +63,27 @@ export default class CartController {
       return errorResponse(res, 500, 'Internal Server Error');
     }
   }
+
+  /**
+   * @method cartDelete
+   * @description Method to delete a product from a Cart
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object}  response object
+   */
+  static async cartDelete(req, res) {
+    const { cartId } = req.params;
+    try {
+      const cartItem = await Carts.findOne({
+        where: { id: cartId }
+      });
+      if (!cartItem) {
+        return errorResponse(res, 404, 'Product not found');
+      }
+      await Carts.destroy({ where: { id: cartId } });
+      return successResponse(res, 200, { message: 'Product removed from Cart' });
+    } catch (error) {
+      return errorResponse(res, 500, 'Internal Server Error');
+    }
+  }
 }
