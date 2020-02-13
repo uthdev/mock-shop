@@ -146,4 +146,55 @@ describe('PRODUCT CONTROLLERS', () => {
       expect(res.status).to.have.been.calledWith(500);
     });
   });
+  context('Delete product from Cart', () => {
+    const req = {
+      params: { cartId: 1 }
+    };
+    const res = {
+      status: () => {},
+      json: () => {}
+    };
+    it('should return a status 200 and add a cart product', async () => {
+      const admin = await request
+        .post('/api/v1/auth/signin')
+        .send(adminUser);
+      const adminToken = admin.body.data.token;
+      const newProduct = await request
+        .post('/api/v1/products')
+        .set({ Authorization: `Bearer ${adminToken}` })
+        .send(product);
+      const productId = newProduct.body.data.id;
+      const user = await request
+        .post('/api/v1/auth/signin')
+        .send(nonAdmin);
+      const userToken = user.body.data.token;
+      const cartItem = await request
+        .post('/api/v1/carts')
+        .set({ Authorization: `Bearer ${userToken}` })
+        .send({ productId });
+      const cartId = cartItem.body.data.id;
+      const res = await request
+        .delete(`/api/v1/carts/${cartId}`)
+        .set({ Authorization: `Bearer ${userToken}` });
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body.status).to.equal('success');
+      expect(res.body).to.have.property('data');
+    });
+    it('fakes a 404 Not found error when deleting a product from Cart', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Carts, 'findOne').returns(null);
+
+      await CartController.cartDelete(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+    });
+    it('fakes server error when deleting a product from Cart', async () => {
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(models.Carts, 'findOne').returns({ productId: 1, userId: 2 });
+      sinon.stub(models.Carts, 'destroy').throws();
+
+      await CartController.cartDelete(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
+  });
 });
