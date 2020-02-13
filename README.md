@@ -24,14 +24,13 @@ Mock Shop is a simple shopping server.
 ## Management
 The project development is managed on [Pivotal tracker](https://www.pivotaltracker.com/n/projects/2433511)
 
-
 ---
-
-
+## Backend
+The api is hosted on [Heroku](https://mock-mall.herokuapp.com/api/v1/)
 
 ---
 ## Documentation
-The api is documented with Swagger on [Mock-Shop api-doc](http://localhost:5000/api-docs/)
+The api is documented with Swagger on [Mock-Shop api-doc](https://mock-mall.herokuapp.com/api-docs/)
 
 
 ---
@@ -56,7 +55,7 @@ The api is documented with Swagger on [Mock-Shop api-doc](http://localhost:5000/
 
 ---
 ## API Information
-
+The API is hosted on [Heroku] https://mock-mall.herokuapp.com/api/v1/
 METHOD |  RESOURCE   |     DESCRIPTION                | ENDPOINTS
 -------|-------------|--------------------------------|-----------
 GET    | ----        | Home page                      |`/api/v1`
