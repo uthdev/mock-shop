@@ -37,10 +37,8 @@ export default class CartController {
       }
       const cart = await Carts.create({ productId, userId });
       return successResponse(res, 201, cart);
-      // const response = product.toJSON();
-      // return successResponse(res, 201, { message: 'Product added to Cart', ...response });
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 
@@ -60,7 +58,7 @@ export default class CartController {
       });
       return successResponse(res, 200, cart);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 
@@ -72,18 +70,18 @@ export default class CartController {
    * @returns {object}  response object
    */
   static async cartDelete(req, res) {
-    const { cartId } = req.params;
+    const { params: { productId }, user: { userId } } = req;
     try {
       const cartItem = await Carts.findOne({
-        where: { id: cartId }
+        where: { productId, userId }
       });
       if (!cartItem) {
         return errorResponse(res, 404, 'Product not found');
       }
-      await Carts.destroy({ where: { id: cartId } });
+      await Carts.destroy({ where: { productId } });
       return successResponse(res, 200, { message: 'Product removed from Cart' });
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 }

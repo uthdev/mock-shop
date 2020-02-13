@@ -33,7 +33,7 @@ export default class AuthController {
       response.token = token;
       return successResponse(res, 201, response);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 
@@ -62,7 +62,7 @@ export default class AuthController {
       response.token = token;
       return successResponse(res, 200, response);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 }

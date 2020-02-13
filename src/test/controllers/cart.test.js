@@ -148,7 +148,8 @@ describe('PRODUCT CONTROLLERS', () => {
   });
   context('Delete product from Cart', () => {
     const req = {
-      params: { cartId: 1 }
+      user: { userId: 1 },
+      params: { productId: 1 }
     };
     const res = {
       status: () => {},
@@ -168,13 +169,12 @@ describe('PRODUCT CONTROLLERS', () => {
         .post('/api/v1/auth/signin')
         .send(nonAdmin);
       const userToken = user.body.data.token;
-      const cartItem = await request
+      await request
         .post('/api/v1/carts')
         .set({ Authorization: `Bearer ${userToken}` })
         .send({ productId });
-      const cartId = cartItem.body.data.id;
       const res = await request
-        .delete(`/api/v1/carts/${cartId}`)
+        .delete(`/api/v1/carts/${productId}`)
         .set({ Authorization: `Bearer ${userToken}` });
       expect(res).to.have.status(200);
       expect(res.body).to.have.property('status');
