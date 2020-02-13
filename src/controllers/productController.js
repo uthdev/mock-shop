@@ -21,7 +21,7 @@ export default class ProductController {
       const result = await Products.create(req.body);
       return successResponse(res, 201, result);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 
@@ -37,7 +37,7 @@ export default class ProductController {
       const products = await Products.findAll();
       return successResponse(res, 200, products);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 
@@ -57,7 +57,7 @@ export default class ProductController {
       }
       return successResponse(res, 200, product);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 
@@ -79,7 +79,7 @@ export default class ProductController {
         { where: { id: productId } });
       return successResponse(res, 200, { message: 'Product updated', ...req.body });
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
   
@@ -104,7 +104,7 @@ export default class ProductController {
       const response = { message: 'Product deleted', ...product };
       return successResponse(res, 200, response);
     } catch (error) {
-      return errorResponse(res, 500, 'Internal Server Error');
+      return errorResponse(res, 500, 'Internal Server Error. Please try again');
     }
   }
 }
