@@ -1,11 +1,25 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import router from './routes';
 import swaggerDocument from '../swagger.json';
 
 const app = express();
 
+//helmet
+app.use(helmet());
+
+// Limit rate
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, //15 minutes
+  max: 100, //limts number of request per IP
+})
+
+app.use(limiter);
+
+//bodyparser
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
